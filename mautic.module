@@ -45,7 +45,7 @@ function mautic_help($path, $arg) {
  * Implements hook_page_alter() to insert JavaScript to the appropriate scope/region of the page.
  */
 function mautic_page_alter(&$page) {
-  if( _mautic_visibility_pages()) {
+  if( _mautic_tracking_pixel_enabled() && _mautic_visibility_pages()) {
     $mautic_base_url = trim(variable_get('mautic_base_url', ''), " \t\n\r\0\x0B/");
     $script = '(function(w,d,t,u,n,a,m){w["MauticTrackingObject"]=n;';
     $script .= 'w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),';
@@ -209,4 +209,12 @@ function _mautic_visibility_pages() {
 
   }
   return $page_match;
+}
+
+/**
+ * Check for setting if tracking pixel should be displayed.
+ */
+function _mautic_tracking_pixel_enabled() {
+  // Turn on the tracking pixel unless this is set in settings.php
+  return variable_get('mautic_tracking_pixel_enabled', 1);
 }
